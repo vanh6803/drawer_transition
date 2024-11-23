@@ -2,6 +2,23 @@
 
 A Flutter package that provides a customizable drawer with smooth animations, gesture controls and scale transitions. This implementation is inspired by the android navigation drawer.
 
+## Preview
+<table>
+  <tr>
+    <td align="center">Default drawer</td>
+    <td align="center">Custom backdrop</td>
+    <td align="center">RTL support</td>
+  </tr>
+  <tr>
+    <td><img src="screenshot/3.png" width="150px"></td>
+    <td><img src="screenshot/1.png" width="150px"></td>
+    <td><img src="screenshot/4.png" width="150px"></td>
+  </tr>
+</table>
+<div>
+  <img src="screenshot/1.png" width="200px" alt="Watch Demo Video" />
+</div>
+
 ## Features
 
 * 🎨 Fully customizable
