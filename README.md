@@ -16,7 +16,9 @@ A Flutter package that provides a customizable drawer with smooth animations, ge
   </tr>
 </table>
 <div>
-  <img src="screenshot/1.png" width="200px" alt="Watch Demo Video" />
+  <a href="screenshot/5.mp4">
+    <img src="screenshot/1.png" width="200px" alt="Watch Demo Video" />
+  </a>
 </div>
 
 ## Features
