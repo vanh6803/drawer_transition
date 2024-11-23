@@ -1,8 +1,9 @@
 # Drawer Transition
 
-A Flutter package that provides a customizable drawer with smooth animations, gesture controls and scale transitions. This implementation is inspired by the android navigation drawer.
+A Flutter package that provides a customizable drawer with smooth animations, scale transitions, and a modern navigation pattern. This implementation offers a comprehensive solution for creating animated drawers with built-in content management.
 
 ## Preview
+
 <table>
   <tr>
     <td align="center">Default drawer</td>
@@ -15,6 +16,7 @@ A Flutter package that provides a customizable drawer with smooth animations, ge
     <td><img src="screenshot/4.png" width="150px"></td>
   </tr>
 </table>
+
 <div>
   <a href="screenshot/5.mp4">
     <img src="screenshot/5.gif" width="200px" alt="Watch Demo Video" />
@@ -23,14 +25,16 @@ A Flutter package that provides a customizable drawer with smooth animations, ge
 
 ## Features
 
-* 🎨 Fully customizable
-* ✨ Smooth animations
-* 📱 Gesture support
+* 🎨 Fully customizable drawer with built-in content management
+* ✨ Smooth animations with scale and slide transitions
+* 📱 Gesture support with drag to open/close
 * 🔄 RTL support
-* 🎯 Scale & slide transitions
-* 🎭 Custom backdrop
+* 🎯 Theme-aware styling
+* 🎭 Custom backdrop support
 * 🎮 Controller for programmatic control
 * 🛡️ Safe area support
+* 📍 Built-in navigation state management
+* 🖼️ Header and footer customization
 
 ## Getting started
 
@@ -61,117 +65,114 @@ dependencies:
     path: /path/to/drawer_transition
 ```
 
-Then run:
-```bash
-flutter pub get
+## Imports
+
+Add the following imports to your file:
+
+```dart
+// Main package import
+import 'package:drawer_transition/drawer_transition.dart';
+
+// Individual imports if needed
+import 'package:drawer_transition/src/controller.dart';
+import 'package:drawer_transition/src/drawer_content.dart';
+import 'package:drawer_transition/src/drawer_item.dart';
+import 'package:drawer_transition/src/value.dart';
+import 'package:drawer_transition/src/widget.dart';
 ```
+
+Note: Typically, you only need the main package import:
+```dart
+import 'package:drawer_transition/drawer_transition.dart';
+```
+
+This gives you access to:
+- `DrawerTransition` widget
+- `DrawerTransitionController`
+- `DrawerTransitionValue`
+- `DrawerContent`
+- `DrawerItem`
+- `DrawerListTile`
 
 ## Usage
 
-### Basic Usage
+### Basic Usage with Navigation
 
 ```dart
 final drawerController = DrawerTransitionController();
+final selectedIndex = ValueNotifier<int>(0);
+
+final items = [
+  DrawerItem(icon: Icons.home, title: 'Home'),
+  DrawerItem(icon: Icons.person, title: 'Profile'),
+  DrawerItem(icon: Icons.settings, title: 'Settings'),
+];
 
 DrawerTransition(
   controller: drawerController,
-  drawer: Container(
-    // Your drawer content
+  drawer: DrawerContent(
+    items: items,
+    selectedIndex: selectedIndex,
+    onDrawerClose: drawerController.hideDrawer,
+    header: YourHeaderWidget(),
+    footer: YourFooterWidget(),
   ),
   child: Scaffold(
-    // Your main app content
+    appBar: AppBar(
+      leading: IconButton(
+        onPressed: drawerController.toggleDrawer,
+        icon: Icon(Icons.menu),
+      ),
+    ),
+    body: ValueListenableBuilder<int>(
+      valueListenable: selectedIndex,
+      builder: (context, index, _) {
+        return YourPages[index];
+      },
+    ),
   ),
 );
 ```
 
-### Complete Example
+### Advanced Customization
 
 ```dart
-class HomePage extends StatefulWidget {
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  final _drawerController = DrawerTransitionController();
-
-  @override
-  Widget build(BuildContext context) {
-    return DrawerTransition(
-      backdrop: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Colors.blueGrey, Colors.blueGrey.withOpacity(0.2)],
-          ),
-        ),
+DrawerTransition(
+  backdrop: Container(
+    decoration: BoxDecoration(
+      gradient: LinearGradient(
+        colors: [Colors.blue.withOpacity(0.8), Colors.purple.withOpacity(0.2)],
       ),
-      controller: _drawerController,
-      animationCurve: Curves.easeInOut,
-      animationDuration: const Duration(milliseconds: 300),
-      animateChildDecoration: true,
-      rtlOpening: false,
-      openScale: 0.7,
-      openRatio: 0.5,
-      childDecoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(16)),
-      ),
-      drawer: SafeArea(
-        child: Column(
-          children: [
-            ListTile(
-              onTap: () {
-                _drawerController.hideDrawer();
-                // Handle tap
-              },
-              leading: Icon(Icons.home),
-              title: Text('Home'),
-            ),
-            // More drawer items...
-          ],
-        ),
-      ),
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: _drawerController.toggleDrawer,
-            icon: ValueListenableBuilder<DrawerTransitionValue>(
-              valueListenable: _drawerController,
-              builder: (_, value, __) {
-                return AnimatedSwitcher(
-                  duration: Duration(milliseconds: 250),
-                  child: Icon(
-                    value.visible ? Icons.clear : Icons.menu,
-                    key: ValueKey<bool>(value.visible),
-                  ),
-                );
-              },
-            ),
-          ),
-        ),
-        body: YourContent(),
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    _drawerController.dispose();
-    super.dispose();
-  }
-}
+    ),
+  ),
+  openRatio: 0.7,
+  openScale: 0.8,
+  animationCurve: Curves.easeInOut,
+  animationDuration: Duration(milliseconds: 300),
+  childDecoration: BoxDecoration(
+    borderRadius: BorderRadius.circular(16),
+  ),
+  drawer: DrawerContent(
+    selectedColor: Colors.amber,
+    selectedTileColor: Colors.amber.withOpacity(0.2),
+    contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12),
+    ),
+    // ... other properties
+  ),
+);
 ```
 
 ## Properties
+
+### DrawerTransition Properties
 
 | Property | Type | Description |
 |----------|------|-------------|
 | `child` | Widget | The main content of your app |
 | `drawer` | Widget | The drawer content that slides in |
-| `controller` | DrawerTransitionController? | Optional controller to manage drawer state |
+| `controller` | DrawerTransitionController? | Controller to manage drawer state |
 | `backdrop` | Widget? | Custom backdrop widget |
 | `backdropColor` | Color? | Color of backdrop when drawer is open |
 | `openRatio` | double | How much of the screen the drawer should occupy (0.0 to 1.0) |
@@ -179,64 +180,30 @@ class _HomePageState extends State<HomePage> {
 | `animationDuration` | Duration | Duration of the open/close animation |
 | `animationCurve` | Curve? | Animation curve to use |
 | `childDecoration` | BoxDecoration? | Decoration for the main content container |
-| `animateChildDecoration` | bool | Whether to animate the child decoration |
 | `rtlOpening` | bool | Whether drawer should open from right-to-left |
 | `disabledGestures` | bool | Whether to disable gesture controls |
 
-## Controller Methods
+### DrawerContent Properties
 
-```dart
-// Show drawer
-drawerController.showDrawer();
-
-// Hide drawer
-drawerController.hideDrawer();
-
-// Toggle drawer state
-drawerController.toggleDrawer();
-```
-
-## Additional Examples
-
-### Custom Backdrop
-
-```dart
-DrawerTransition(
-  backdrop: Container(
-    decoration: BoxDecoration(
-      gradient: LinearGradient(
-        colors: [Colors.blue, Colors.purple],
-      ),
-    ),
-  ),
-  // ...
-);
-```
-
-### RTL Support
-
-```dart
-DrawerTransition(
-  rtlOpening: true,  // Drawer will open from right
-  // ...
-);
-```
-
-### Custom Animation
-
-```dart
-DrawerTransition(
-  animationDuration: Duration(milliseconds: 500),
-  animationCurve: Curves.bounceOut,
-  // ...
-);
-```
+| Property | Type | Description |
+|----------|------|-------------|
+| `items` | List<DrawerItem> | List of drawer items |
+| `selectedIndex` | ValueNotifier<int> | Controls the selected item state |
+| `onDrawerClose` | VoidCallback | Callback when drawer should close |
+| `header` | Widget? | Optional header widget |
+| `footer` | Widget? | Optional footer widget |
+| `selectedColor` | Color? | Color for selected item text/icon |
+| `selectedTileColor` | Color? | Background color for selected item |
+| `contentPadding` | EdgeInsetsGeometry? | Padding for list items |
+| `textColor` | Color? | Default text color |
+| `iconColor` | Color? | Default icon color |
 
 ## Notes
 
-- Remember to dispose of the controller when it's no longer needed
+- Remember to dispose of controllers when they're no longer needed
+- The drawer content uses theme colors by default but can be overridden
 - BoxShadow in childDecoration might cause animation jerks
-- For optimal performance, wrap your drawer content with RepaintBoundary
+- For optimal performance, heavy content should be wrapped with RepaintBoundary
 
 ## Issues and Feedback
 

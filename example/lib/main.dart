@@ -25,6 +25,29 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _drawerController = DrawerTransitionController();
+  final _selectedIndex = ValueNotifier<int>(0);
+
+  final List<DrawerItem> _items = [
+    DrawerItem(icon: Icons.home, title: 'Home'),
+    DrawerItem(icon: Icons.account_circle_rounded, title: 'Profile'),
+    DrawerItem(icon: Icons.favorite, title: 'Favourites'),
+    DrawerItem(icon: Icons.settings, title: 'Settings'),
+  ];
+
+  final List<Widget> _pages = [
+    const Center(
+      child: Text('Home'),
+    ),
+    const Center(
+      child: Text('Profile'),
+    ),
+    const Center(
+      child: Text('Favourites'),
+    ),
+    const Center(
+      child: Text('Settings'),
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -55,72 +78,28 @@ class _HomePageState extends State<HomePage> {
       childDecoration: const BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(16)),
       ),
-      drawer: SafeArea(
-        child: ListTileTheme(
-          textColor: Colors.white,
-          iconColor: Colors.white,
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Container(
-                width: 128.0,
-                height: 128.0,
-                margin: const EdgeInsets.only(
-                  top: 24.0,
-                  bottom: 64.0,
-                ),
-                clipBehavior: Clip.antiAlias,
-                decoration: const BoxDecoration(
-                  color: Colors.black26,
-                  shape: BoxShape.circle,
-                ),
-                child: Image.asset(
-                  'assets/test.jpg',
-                  fit: BoxFit.cover,
-                ),
-              ),
-              ListTile(
-                onTap: () {
-                  _drawerController.hideDrawer();
-                },
-                leading: const Icon(Icons.home),
-                title: const Text('Home'),
-              ),
-              ListTile(
-                onTap: () {
-                  _drawerController.hideDrawer();
-                },
-                leading: const Icon(Icons.account_circle_rounded),
-                title: const Text('Profile'),
-              ),
-              ListTile(
-                onTap: () {
-                  _drawerController.hideDrawer();
-                },
-                leading: const Icon(Icons.favorite),
-                title: const Text('Favourites'),
-              ),
-              ListTile(
-                onTap: () {
-                  _drawerController.hideDrawer();
-                },
-                leading: const Icon(Icons.settings),
-                title: const Text('Settings'),
-              ),
-              const Spacer(),
-              DefaultTextStyle(
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: Colors.white54,
-                ),
-                child: Container(
-                  margin: const EdgeInsets.symmetric(
-                    vertical: 16.0,
-                  ),
-                  child: const Text('Terms of Service | Privacy Policy'),
-                ),
-              ),
-            ],
+      drawer: DrawerContent(
+        items: _items,
+        selectedIndex: _selectedIndex,
+        onDrawerClose: _drawerController.hideDrawer,
+        selectedColor: Colors.black,
+        selectedTileColor: Colors.black.withOpacity(0.4),
+        header: Container(
+          width: 128.0,
+          height: 128.0,
+          margin: const EdgeInsets.only(top: 24.0, bottom: 64.0),
+          clipBehavior: Clip.antiAlias,
+          decoration: const BoxDecoration(
+            color: Colors.black26,
+            shape: BoxShape.circle,
+          ),
+          child: Image.asset('assets/test.jpg', fit: BoxFit.cover),
+        ),
+        footer: DefaultTextStyle(
+          style: const TextStyle(fontSize: 12, color: Colors.white54),
+          child: Container(
+            margin: const EdgeInsets.symmetric(vertical: 16.0),
+            child: const Text('Terms of Service | Privacy Policy'),
           ),
         ),
       ),
@@ -143,7 +122,12 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-        body: Container(),
+        body: ValueListenableBuilder<int>(
+          valueListenable: _selectedIndex,
+          builder: (context, index, _) {
+            return _pages[index];
+          },
+        ),
       ),
     );
   }

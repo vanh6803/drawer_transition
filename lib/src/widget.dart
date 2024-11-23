@@ -6,7 +6,7 @@ import 'value.dart';
 /// DrawerTransition widget.
 class DrawerTransition extends StatefulWidget {
   const DrawerTransition({
-    Key? key,
+    super.key,
     required this.child,
     required this.drawer,
     this.controller,
@@ -21,7 +21,7 @@ class DrawerTransition extends StatefulWidget {
     this.rtlOpening = false,
     this.disabledGestures = false,
     this.animationController,
-  }) : super(key: key);
+  });
 
   final Widget child;
   final Widget drawer;
@@ -88,7 +88,12 @@ class _DrawerTransitionState extends State<DrawerTransition>
           color: Colors.transparent,
           child: Stack(
             children: [
-              if (widget.backdrop != null) widget.backdrop!,
+              widget.backdrop ??
+                  Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    color: Colors.black.withOpacity(0.5),
+                  ),
               Align(
                 alignment: widget.rtlOpening
                     ? Alignment.centerRight
