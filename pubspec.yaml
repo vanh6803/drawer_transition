@@ -1,7 +1,7 @@
 name: drawer_transition
 description: "A new Flutter package project."
-version: 0.0.1
-homepage: https://github.com/vanh6803/drawer_animation
+version: 0.0.2
+homepage: https://github.com/vanh6803/drawer_transition
 
 environment:
   sdk: '>=3.1.0 <4.0.0'

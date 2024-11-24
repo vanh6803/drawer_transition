@@ -27,28 +27,45 @@ class _HomePageState extends State<HomePage> {
   final _drawerController = DrawerTransitionController();
   final _selectedIndex = ValueNotifier<int>(0);
 
-  final List<DrawerItem> _items = [
-    DrawerItem(icon: Icons.home, title: 'Home'),
-    DrawerItem(icon: Icons.account_circle_rounded, title: 'Profile'),
-    DrawerItem(icon: Icons.favorite, title: 'Favourites'),
-    DrawerItem(icon: Icons.settings, title: 'Settings'),
+  final List<(DrawerItem, Widget)> _drawerConfig = [
+    (
+      DrawerItem.basic(
+        icon: Icons.home,
+        title: 'Home',
+      ),
+      const Center(child: Text('Home')),
+    ),
+    (
+      DrawerItem.custom(
+        leading: const CircleAvatar(child: Icon(Icons.person)),
+        titleWidget: const Text('Profile'),
+        trailing: const Badge(child: Icon(Icons.notifications)),
+      ),
+      const Center(child: Text('Profile')),
+    ),
+    (
+      DrawerItem.builder(
+        builder: (context, isSelected) {
+          return ListTile(
+            selected: isSelected,
+            selectedColor: Colors.black,
+            selectedTileColor: Colors.black.withOpacity(0.4),
+            leading: Icon(Icons.favorite),
+            title: Text(
+              'Favourites',
+              maxLines: 1,
+            ),
+            trailing: Icon(Icons.arrow_forward_ios),
+          );
+        },
+      ),
+      const Center(child: Text('Favourites')),
+    ),
   ];
 
-  final List<Widget> _pages = [
-    const Center(
-      child: Text('Home'),
-    ),
-    const Center(
-      child: Text('Profile'),
-    ),
-    const Center(
-      child: Text('Favourites'),
-    ),
-    const Center(
-      child: Text('Settings'),
-    ),
-  ];
-
+  // Tách items và pages từ _drawerConfig
+  List<DrawerItem> get _items => _drawerConfig.map((e) => e.$1).toList();
+  List<Widget> get _pages => _drawerConfig.map((e) => e.$2).toList();
   @override
   Widget build(BuildContext context) {
     return DrawerTransition(

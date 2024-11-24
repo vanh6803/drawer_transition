@@ -1,7 +1,6 @@
+import 'package:drawer_transition/src/drawer_item.dart';
 import 'package:drawer_transition/src/drawer_list_title.dart';
 import 'package:flutter/material.dart';
-
-import 'drawer_item.dart';
 
 class DrawerContent extends StatelessWidget {
   final List<DrawerItem> items;
@@ -51,10 +50,8 @@ class DrawerContent extends StatelessWidget {
                     itemCount: items.length,
                     padding: EdgeInsets.zero,
                     itemBuilder: (context, index) {
-                      final item = items[index];
                       return DrawerListTile(
-                        icon: item.icon,
-                        title: item.title,
+                        item: items[index], // Truyền toàn bộ DrawerItem
                         isSelected: selected == index,
                         selectedColor: selectedColor,
                         selectedTileColor: selectedTileColor,

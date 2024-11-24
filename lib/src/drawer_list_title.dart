@@ -1,8 +1,8 @@
+import 'package:drawer_transition/src/drawer_item.dart';
 import 'package:flutter/material.dart';
 
 class DrawerListTile extends StatelessWidget {
-  final IconData icon;
-  final String title;
+  final DrawerItem item;
   final bool isSelected;
   final VoidCallback onTap;
   final Color? selectedColor;
@@ -13,8 +13,7 @@ class DrawerListTile extends StatelessWidget {
 
   const DrawerListTile({
     super.key,
-    required this.icon,
-    required this.title,
+    required this.item,
     required this.isSelected,
     required this.onTap,
     this.selectedColor,
@@ -27,14 +26,23 @@ class DrawerListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (item.builder != null) {
+      return InkWell(
+        onTap: onTap,
+        child: item.builder!(context, isSelected),
+      );
+    }
+
     return ListTile(
       onTap: onTap,
       selected: isSelected,
       selectedColor: selectedColor ?? Theme.of(context).primaryColor,
       selectedTileColor:
           selectedTileColor ?? Theme.of(context).primaryColor.withOpacity(0.2),
-      leading: Icon(icon),
-      title: Text(title),
+      leading: item.leading ?? (item.icon != null ? Icon(item.icon) : null),
+      title:
+          item.titleWidget ?? (item.title != null ? Text(item.title!) : null),
+      trailing: item.trailing,
       hoverColor: hoverColor ?? Colors.white.withOpacity(0.1),
       shape: shape ??
           RoundedRectangleBorder(

@@ -53,7 +53,7 @@ dependencies:
 dependencies:
   drawer_transition:
     git:
-      url: git://github.com/username/drawer_transition.git
+      url: https://github.com/vanh6803/drawer_transition
       ref: main
 ```
 
