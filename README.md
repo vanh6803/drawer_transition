@@ -134,6 +134,49 @@ DrawerTransition(
 );
 ```
 
+### Custom Drawer Items
+
+```dart
+final items = [
+  // Basic item with icon and title
+  DrawerItem.basic(
+    icon: Icons.home,
+    title: 'Home',
+  ),
+  
+  // Custom item with widgets
+  DrawerItem.custom(
+    leading: CircleAvatar(
+      child: Icon(Icons.person),
+    ),
+    titleWidget: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Profile'),
+        Text('Admin', style: TextStyle(fontSize: 12)),
+      ],
+    ),
+    trailing: Badge(
+      child: Icon(Icons.notifications),
+    ),
+  ),
+  
+  // Fully custom item using builder
+  DrawerItem.builder(
+    builder: (context, isSelected) {
+      return ListTile(
+        selected: isSelected,
+        selectedColor: Colors.black,
+        selectedTileColor: Colors.black.withOpacity(0.4),
+        leading: Icon(Icons.favorite),
+        title: Text('Favorites'),
+        trailing: Icon(Icons.arrow_forward_ios),
+      );
+    },
+  ),
+];
+```
+
 ### Advanced Customization
 
 ```dart
@@ -197,6 +240,26 @@ DrawerTransition(
 | `contentPadding` | EdgeInsetsGeometry? | Padding for list items |
 | `textColor` | Color? | Default text color |
 | `iconColor` | Color? | Default icon color |
+
+### DrawerItem Constructors
+
+| Constructor | Description |
+|------------|-------------|
+| `DrawerItem.basic()` | Create item with icon and title |
+| `DrawerItem.custom()` | Create item with custom leading, title and trailing widgets |
+| `DrawerItem.builder()` | Create fully custom item with builder function |
+
+### DrawerItem Properties
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `icon` | IconData? | Icon for basic item |
+| `title` | String? | Title text for basic item |
+| `leading` | Widget? | Custom leading widget |
+| `titleWidget` | Widget? | Custom title widget |
+| `trailing` | Widget? | Custom trailing widget |
+| `builder` | Widget Function(BuildContext, bool)? | Builder function for full customization |
+
 
 ## Notes
 
